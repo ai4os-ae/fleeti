@@ -111,7 +111,7 @@ func UsersPage(c flamego.Context, s session.Session, t template.Template, data t
 		}
 
 		if invite, ok := resetByUser[id]; ok {
-			expiresAt := invite.CreatedAt.Add(24 * time.Hour)
+			expiresAt := invite.CreatedAt.Add(7 * 24 * time.Hour)
 			row.HasReset = true
 			row.ResetURL = baseSetupURL + "?token=" + url.QueryEscape(invite.Token)
 			row.ResetInviteID = invite.ID.String()
@@ -145,7 +145,7 @@ func loadInviteData(ctx context.Context, c flamego.Context, data template.Data) 
 				displayName = strings.TrimSpace(*invite.DisplayName)
 			}
 
-			expiresAt := invite.CreatedAt.Add(24 * time.Hour)
+			expiresAt := invite.CreatedAt.Add(7 * 24 * time.Hour)
 			inviteInfos = append(inviteInfos, InviteInfo{
 				ID:          invite.ID.String(),
 				DisplayName: displayName,
@@ -172,7 +172,7 @@ func loadInviteData(ctx context.Context, c flamego.Context, data template.Data) 
 				displayName = strings.TrimSpace(*invite.DisplayName)
 			}
 
-			expiresAt := invite.CreatedAt.Add(24 * time.Hour)
+			expiresAt := invite.CreatedAt.Add(7 * 24 * time.Hour)
 			expiredInviteInfos = append(expiredInviteInfos, InviteInfo{
 				ID:          invite.ID.String(),
 				DisplayName: displayName,

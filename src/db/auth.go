@@ -105,7 +105,7 @@ func FinalizeSetupRegistration(ctx context.Context, input FinalizeSetupRegistrat
 			SET used_at = NOW()
 			WHERE id = $1
 			  AND used_at IS NULL
-			  AND created_at >= NOW() - INTERVAL '24 hours'
+			  AND created_at >= NOW() - INTERVAL '7 days'
 		`, strings.TrimSpace(*input.InviteID))
 		if err != nil {
 			return nil, fmt.Errorf("failed to consume invite: %w", err)
@@ -307,7 +307,7 @@ func FinalizeRecoveryRegistration(ctx context.Context, input FinalizeRecoveryReg
 		WHERE id = $1
 		  AND user_id = $2
 		  AND used_at IS NULL
-		  AND created_at >= NOW() - INTERVAL '24 hours'
+		  AND created_at >= NOW() - INTERVAL '7 days'
 	`, strings.TrimSpace(input.InviteID), input.UserID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to consume recovery invite: %w", err)

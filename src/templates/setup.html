@@ -24,9 +24,9 @@
 
 {{ if .BootstrapReady }}
   {{ if .IsRecovery }}
-  <p>Register a new passkey to recover access to your account. This link works once and expires after 24 hours. Any previously registered passkeys will be removed.</p>
+  <p>Register a new passkey to recover access to your account. This link works once and expires after 7 days. Any previously registered passkeys will be removed.</p>
   {{ else if .IsInviteSetup }}
-  <p>Create your account using a passkey. This setup link works once and expires after 24 hours.</p>
+  <p>Create your account using a passkey. This setup link works once and expires after 7 days.</p>
   {{ else }}
   <p>Create the first admin account using a passkey. This account will be able to add more passkeys later.</p>
   {{ end }}

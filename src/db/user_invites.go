@@ -143,7 +143,7 @@ func ListPendingUserInvites(ctx context.Context) ([]UserInvite, error) {
 		FROM user_invites
 		WHERE used_at IS NULL
 		  AND user_id IS NULL
-		  AND created_at >= NOW() - INTERVAL '24 hours'
+		  AND created_at >= NOW() - INTERVAL '7 days'
 		ORDER BY created_at DESC
 	`)
 	if err != nil {
@@ -190,7 +190,7 @@ func ListPendingRecoveryInvites(ctx context.Context) ([]UserInvite, error) {
 		FROM user_invites
 		WHERE used_at IS NULL
 		  AND user_id IS NOT NULL
-		  AND created_at >= NOW() - INTERVAL '24 hours'
+		  AND created_at >= NOW() - INTERVAL '7 days'
 		ORDER BY created_at DESC
 	`)
 	if err != nil {
@@ -237,7 +237,7 @@ func ListExpiredUserInvites(ctx context.Context) ([]UserInvite, error) {
 		FROM user_invites
 		WHERE used_at IS NULL
 		  AND user_id IS NULL
-		  AND created_at < NOW() - INTERVAL '24 hours'
+		  AND created_at < NOW() - INTERVAL '7 days'
 		ORDER BY created_at DESC
 	`)
 	if err != nil {
@@ -286,7 +286,7 @@ func GetUserInviteByToken(ctx context.Context, token string) (*UserInvite, error
 		FROM user_invites
 		WHERE token = $1
 		  AND used_at IS NULL
-		  AND created_at >= NOW() - INTERVAL '24 hours'
+		  AND created_at >= NOW() - INTERVAL '7 days'
 	`, token).Scan(
 		&invite.ID,
 		&invite.Token,
@@ -320,7 +320,7 @@ func GetUserInviteByID(ctx context.Context, id string) (*UserInvite, error) {
 		FROM user_invites
 		WHERE id = $1
 		  AND used_at IS NULL
-		  AND created_at >= NOW() - INTERVAL '24 hours'
+		  AND created_at >= NOW() - INTERVAL '7 days'
 	`, id).Scan(
 		&invite.ID,
 		&invite.Token,
@@ -360,7 +360,7 @@ func RegenerateExpiredUserInvite(ctx context.Context, id string) (*UserInvite, e
 		    created_at = NOW()
 		WHERE id = $2
 		  AND used_at IS NULL
-		  AND created_at < NOW() - INTERVAL '24 hours'
+		  AND created_at < NOW() - INTERVAL '7 days'
 		RETURNING id, token, display_name, created_at, used_at, created_by, user_id
 	`, token, id).Scan(
 		&invite.ID,
@@ -382,7 +382,7 @@ func RegenerateExpiredUserInvite(ctx context.Context, id string) (*UserInvite, e
 	var isExpired bool
 
 	err = pool.QueryRow(ctx, `
-		SELECT created_at < NOW() - INTERVAL '24 hours'
+		SELECT created_at < NOW() - INTERVAL '7 days'
 		FROM user_invites
 		WHERE id = $1
 		  AND used_at IS NULL
